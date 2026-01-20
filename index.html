@@ -1351,83 +1351,121 @@
         }
 
         // =====================================
-        // AMBIENT SOUND SYSTEM
+        // AMBIENT MUSIC (Smooth Melodic Loop)
         // =====================================
         const audioToggle = document.getElementById('audio-toggle');
         const audioOnIcon = audioToggle.querySelector('.audio-on');
         const audioOffIcon = audioToggle.querySelector('.audio-off');
-        let audioContext = null;
-        let isPlaying = false;
-        let oscillators = [];
-        let gainNode = null;
+        let audioCtx = null;
+        let osc = null;
+        let gain = null;
+        let melodyInterval = null;
+        let isAudioPlaying = false;
 
-        const createAmbientSound = () => {
-            if (audioContext) return;
-
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            gainNode = audioContext.createGain();
-            gainNode.gain.value = 0.03; // Very low volume
-            gainNode.connect(audioContext.destination);
-
-            // Create subtle ambient drone
-            const frequencies = [65, 98, 130, 196]; // Low ambient frequencies
-            frequencies.forEach((freq, i) => {
-                const osc = audioContext.createOscillator();
-                const oscGain = audioContext.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                oscGain.gain.value = 0.15 / (i + 1);
-                osc.connect(oscGain);
-                oscGain.connect(gainNode);
-                osc.start();
-                oscillators.push({ osc, gain: oscGain });
-            });
-
-            // Add subtle radar ping every few seconds
-            const createPing = () => {
-                if (!isPlaying) return;
-                const ping = audioContext.createOscillator();
-                const pingGain = audioContext.createGain();
-                ping.type = 'sine';
-                ping.frequency.value = 1200;
-                pingGain.gain.value = 0;
-                ping.connect(pingGain);
-                pingGain.connect(gainNode);
-
-                const now = audioContext.currentTime;
-                pingGain.gain.setValueAtTime(0, now);
-                pingGain.gain.linearRampToValueAtTime(0.1, now + 0.05);
-                pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-
-                ping.start(now);
-                ping.stop(now + 0.5);
-
-                setTimeout(createPing, 4000 + Math.random() * 3000);
-            };
-            setTimeout(createPing, 2000);
+        const NOTES = {
+            // Octave 2
+            A2: 110.00, G2: 98.00,
+            // Octave 3
+            c3: 130.81, d3: 146.83, e3: 164.81, f3: 174.61, g3: 196.00, a3: 220.00, b3: 246.94,
+            D3: 138.59, G3: 207.65, A3: 233.08,
+            // Octave 4
+            c4: 261.63, d4: 293.66, e4: 329.63, f4: 349.23, g4: 392.00, a4: 440.00, b4: 493.88,
+            D4: 311.13, F4: 369.99, G4: 415.30,
+            // Octave 5
+            c5: 523.25, d5: 587.33
         };
 
-        const toggleAudio = () => {
-            if (!isPlaying) {
-                createAmbientSound();
-                if (audioContext.state === 'suspended') {
-                    audioContext.resume();
-                }
-                gainNode.gain.setTargetAtTime(0.03, audioContext.currentTime, 0.5);
-                isPlaying = true;
-                audioToggle.classList.add('playing');
-                audioOnIcon.style.display = 'none';
-                audioOffIcon.style.display = 'block';
+        // Main melody from user's piano sheet
+        const melody = [
+            'c4', 'c4', 'D4', 'c4', 'f4', 'D4', 'c4', 'c4', 'D4', 'c4',
+            'f4', 'g4', 'c4', 'c4', 'D4', 'c4', 'f4', 'D4', 'c4',
+            'c4', 'D4', 'c4', 'f4', 'g4', 'f4', 'g4', 'G4', 'G4', 'G4', 'g4', 'g4', 'g4',
+            'f4', 'f4', 'f4', 'D4', 'D4', 'D4', 'd4', 'G4', 'g4',
+            'G4', 'g4', 'G4', 'g4',
+            'c4', 'c4', 'c4', 'c4', 'c4', 'd4', 'c4',
+            'c4', 'c4', 'c4', 'c4', 'c4',
+            'f4', 'g4', 'f4', 'c4', 'c4', 'c4', 'c4',
+            'c4', 'G4', 'g4', 'f4', 'c4',
+            'g4', 'f4', 'g4', 'G4', 'b4', 'D4',
+            'f4', 'g4', 'f4', 'D4', 'c4', 'D4', 'f4', 'g4', 'f4', 'f4',
+            'g4', 'e4', 'g4', 'a4', 'b4', 'a4', 'g4', 'g4',
+            'a4', 'g4', 'g4', 'g4', 'e4', 'g4',
+            'e4', 'g4', 'a4', 'd5', 'b4',
+            'a4', 'g4', 'g4', 'a4', 'e4',
+            'e4', 'd4', 'd4', 'c4', 'd4',
+            'c4', 'd4', 'e4', 'd4',
+            'c4', 'c4', 'c4', 'd4', 'd4',
+            'c4', 'c4', 'c4', 'e4', 'd4',
+            'e4', 'c4', 'c4', 'c4'
+        ];
+
+        let noteIndex = 0;
+
+        const startMusic = () => {
+            if (audioCtx) return;
+
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            osc = audioCtx.createOscillator();
+            osc.type = 'sine';
+
+            gain = audioCtx.createGain();
+            gain.gain.value = 0;
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+
+            melodyInterval = setInterval(() => {
+                osc.frequency.setValueAtTime(
+                    NOTES[melody[noteIndex % melody.length]],
+                    audioCtx.currentTime
+                );
+
+                gain.gain.cancelScheduledValues(audioCtx.currentTime);
+                gain.gain.setTargetAtTime(0.18, audioCtx.currentTime, 0.05);
+                gain.gain.setTargetAtTime(0.0, audioCtx.currentTime + 0.35, 0.1);
+
+                noteIndex++;
+            }, 420);
+
+            isAudioPlaying = true;
+            audioToggle.classList.add('playing');
+            audioOnIcon.style.display = 'none';
+            audioOffIcon.style.display = 'block';
+        };
+
+        const stopMusic = () => {
+            if (melodyInterval) clearInterval(melodyInterval);
+            if (osc) osc.stop();
+            if (audioCtx) audioCtx.close();
+            audioCtx = null;
+            osc = null;
+            gain = null;
+            isAudioPlaying = false;
+            audioToggle.classList.remove('playing');
+            audioOnIcon.style.display = 'block';
+            audioOffIcon.style.display = 'none';
+        };
+
+        // Auto-start on first interaction
+        const autoStart = () => {
+            if (!isAudioPlaying) startMusic();
+            document.removeEventListener('click', autoStart);
+            document.removeEventListener('scroll', autoStart);
+        };
+        document.addEventListener('click', autoStart, { once: true });
+        document.addEventListener('scroll', autoStart, { once: true });
+
+        // Toggle button
+        audioToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isAudioPlaying) {
+                stopMusic();
             } else {
-                gainNode.gain.setTargetAtTime(0, audioContext.currentTime, 0.3);
-                isPlaying = false;
-                audioToggle.classList.remove('playing');
-                audioOnIcon.style.display = 'block';
-                audioOffIcon.style.display = 'none';
+                startMusic();
             }
-        };
-
-        audioToggle.addEventListener('click', toggleAudio);
+        });
     </script>
 </body>
 
