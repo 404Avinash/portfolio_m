@@ -1,45 +1,52 @@
 /* ========================================
    PORTFOLIO - Avinash Jha
-   Premium Dark Theme with Glassmorphism
-   V3 - Ultra Premium with Advanced Effects
+   Premium Dark Theme with Defence-Tech HUD
+   V4 - Tactical Defence Aesthetic
 ======================================== */
 
 :root {
-    /* Colors */
-    --bg-primary: #050508;
-    --bg-secondary: #0a0a12;
-    --bg-card: rgba(255, 255, 255, 0.02);
-    --bg-card-hover: rgba(255, 255, 255, 0.05);
-    --border-color: rgba(255, 255, 255, 0.06);
-    --border-hover: rgba(255, 255, 255, 0.12);
+    /* Base Colors - Deep Military Dark */
+    --bg-primary: #030508;
+    --bg-secondary: #0a0d12;
+    --bg-card: rgba(16, 42, 66, 0.15);
+    --bg-card-hover: rgba(16, 42, 66, 0.25);
+    --border-color: rgba(34, 211, 238, 0.15);
+    --border-hover: rgba(34, 211, 238, 0.35);
 
     /* Text Colors */
-    --text-primary: #ffffff;
+    --text-primary: #e2e8f0;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
 
-    /* Accent Colors - More Vibrant */
-    --accent-primary: #818cf8;
-    --accent-secondary: #a78bfa;
-    --accent-tertiary: #f472b6;
-    --accent-gradient: linear-gradient(135deg, #818cf8 0%, #a78bfa 35%, #f472b6 70%, #fb7185 100%);
-    --accent-gradient-reverse: linear-gradient(-135deg, #fb7185 0%, #f472b6 35%, #a78bfa 70%, #818cf8 100%);
-    --accent-glow: rgba(129, 140, 248, 0.5);
-    --accent-glow-pink: rgba(244, 114, 182, 0.4);
+    /* Tactical Defense Colors */
+    --tactical-green: #22c55e;
+    --tactical-cyan: #22d3ee;
+    --tactical-amber: #f59e0b;
+    --tactical-red: #ef4444;
+    --radar-glow: rgba(34, 211, 238, 0.6);
 
-    /* Cyber Colors */
-    --cyber-blue: #22d3ee;
-    --cyber-green: #4ade80;
-    --neon-purple: #c084fc;
+    /* Accent Colors - Defense Tech */
+    --accent-primary: #22d3ee;
+    --accent-secondary: #06b6d4;
+    --accent-tertiary: #22c55e;
+    --accent-gradient: linear-gradient(135deg, #22d3ee 0%, #06b6d4 35%, #22c55e 70%, #86efac 100%);
+    --accent-gradient-reverse: linear-gradient(-135deg, #86efac 0%, #22c55e 35%, #06b6d4 70%, #22d3ee 100%);
+    --accent-glow: rgba(34, 211, 238, 0.5);
+    --accent-glow-green: rgba(34, 197, 94, 0.4);
+
+    /* HUD Colors */
+    --hud-border: rgba(34, 211, 238, 0.3);
+    --hud-bg: rgba(3, 5, 8, 0.85);
+    --scan-line: rgba(34, 211, 238, 0.1);
 
     /* Social Colors */
     --linkedin: #0a66c2;
-    --github: #ffffff;
+    --github: #e2e8f0;
 
-    /* Success/Badge Colors */
-    --success: #34d399;
-    --warning: #fbbf24;
-    --live: #f87171;
+    /* Status Colors */
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --live: #ef4444;
 
     /* Typography */
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -54,7 +61,7 @@
     --transition-slow: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
     --shadow-glow: 0 0 50px var(--accent-glow);
-    --shadow-glow-intense: 0 0 80px var(--accent-glow), 0 0 120px var(--accent-glow-pink);
+    --shadow-glow-intense: 0 0 80px var(--accent-glow), 0 0 120px var(--accent-glow-green);
 }
 
 /* ========================================
@@ -307,14 +314,17 @@ body {
     align-items: center;
     gap: 8px;
     padding: 10px 24px;
-    background: rgba(129, 140, 248, 0.1);
-    border: 1px solid rgba(129, 140, 248, 0.3);
-    border-radius: 50px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    border-radius: 4px;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    color: var(--tactical-cyan);
     margin-bottom: 24px;
     backdrop-filter: blur(10px);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
 .hero-title {
@@ -326,12 +336,13 @@ body {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #818cf8 0%, #a78bfa 25%, #f472b6 50%, #a78bfa 75%, #818cf8 100%);
+    background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 25%, #22c55e 50%, #06b6d4 75%, #22d3ee 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradientShimmer 3s linear infinite;
+    text-shadow: 0 0 40px rgba(34, 211, 238, 0.3);
 }
 
 @keyframes gradientShimmer {
@@ -1439,5 +1450,145 @@ body {
     .project-link {
         width: 100%;
         justify-content: center;
+    }
+}
+
+/* ========================================
+   DEFENCE HUD ELEMENTS
+======================================== */
+
+/* HUD Corner Brackets for Cards */
+.project-card::after,
+.skill-category::after,
+.leadership-card::after,
+.about-card::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    border-radius: 16px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-card:hover::after,
+.skill-category:hover::after,
+.leadership-card:hover::after,
+.about-card:hover::after {
+    opacity: 1;
+}
+
+/* Tactical Status Indicator */
+.project-badge.live::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--tactical-red);
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: statusBlink 1s infinite;
+}
+
+@keyframes statusBlink {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 8px var(--tactical-red);
+    }
+
+    50% {
+        opacity: 0.5;
+        box-shadow: 0 0 4px var(--tactical-red);
+    }
+}
+
+/* Scan Line Effect */
+.hero::before {
+    background-image:
+        linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridPulse 4s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Section Tags with Tactical Style */
+.section-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--tactical-cyan);
+    margin-bottom: 16px;
+    padding: 4px 12px;
+    background: rgba(34, 211, 238, 0.1);
+    border-left: 3px solid var(--tactical-cyan);
+    letter-spacing: 0.05em;
+}
+
+/* Tactical Border Glow on Project Cards */
+.project-card.featured::before {
+    background: linear-gradient(135deg, #22d3ee, #06b6d4, #22c55e, #86efac, #22d3ee);
+}
+
+/* ========================================
+   AUDIO TOGGLE BUTTON
+======================================== */
+.audio-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(3, 5, 8, 0.9);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    color: var(--tactical-cyan);
+    cursor: pointer;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.audio-toggle:hover {
+    border-color: var(--tactical-cyan);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    transform: scale(1.1);
+}
+
+.audio-toggle.playing {
+    border-color: var(--tactical-green);
+    color: var(--tactical-green);
+    animation: audioPulse 2s infinite;
+}
+
+@keyframes audioPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(34, 197, 94, 0.5);
     }
 }

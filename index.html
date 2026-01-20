@@ -50,11 +50,27 @@
         </div>
     </nav>
 
+    <!-- Audio Toggle Button -->
+    <button id="audio-toggle" class="audio-toggle" aria-label="Toggle ambient sound" title="Toggle ambient sound">
+        <svg class="audio-on" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+        <svg class="audio-off" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" style="display:none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <line x1="23" y1="9" x2="17" y2="15" />
+            <line x1="17" y1="9" x2="23" y2="15" />
+        </svg>
+    </button>
+
     <!-- Hero Section -->
     <header class="hero" id="hero">
         <div class="hero-bg"></div>
         <div class="hero-content">
-            <div class="hero-badge">🛡️ Defence-Tech Innovator & Systems Architect</div>
+            <div class="hero-badge">⟨ DEFENCE-TECH INNOVATOR // SYSTEMS ARCHITECT ⟩</div>
             <h1 class="hero-title">
                 Hi, I'm <span class="gradient-text">Avinash Jha</span>
             </h1>
@@ -518,19 +534,6 @@
             </div>
             <div class="achievements-timeline">
                 <div class="achievement-item">
-                    <div class="achievement-year">2023</div>
-                    <div class="achievement-content">
-                        <div class="achievement-badge">🏆 National Winner</div>
-                        <h3>CSIR-NAL Aerofest 3.0</h3>
-                        <p class="achievement-subtitle">HAPS UAV Project</p>
-                        <ul>
-                            <li>Built high-endurance High-Altitude Pseudo-Satellite (HAPS) UAV</li>
-                            <li>Designed high-aspect-ratio wings for stable long-duration flight</li>
-                            <li>Presented to NAL jury and secured national top position</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="achievement-item">
                     <div class="achievement-year">2022</div>
                     <div class="achievement-content">
                         <div class="achievement-badge">🏆 National Winner</div>
@@ -540,6 +543,19 @@
                             <li>Designed and built working electric aircraft model prototype</li>
                             <li>Optimized aerodynamics for maximum lift efficiency</li>
                             <li>Demonstrated to CSIR officials; achieved national win</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-year">2023</div>
+                    <div class="achievement-content">
+                        <div class="achievement-badge">🏆 National Winner</div>
+                        <h3>CSIR-NAL Aerofest 3.0</h3>
+                        <p class="achievement-subtitle">HAPS UAV Project</p>
+                        <ul>
+                            <li>Built high-endurance High-Altitude Pseudo-Satellite (HAPS) UAV</li>
+                            <li>Designed high-aspect-ratio wings for stable long-duration flight</li>
+                            <li>Presented to NAL jury and secured national top position</li>
                         </ul>
                     </div>
                 </div>
@@ -694,16 +710,17 @@
 
     <script>
         // =====================================
-        // PARTICLE BACKGROUND SYSTEM
+        // TACTICAL PARTICLE RADAR SYSTEM
         // =====================================
         const createParticleCanvas = () => {
             const canvas = document.createElement('canvas');
             canvas.id = 'particles';
-            canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.6;';
+            canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.7;';
             document.body.prepend(canvas);
 
             const ctx = canvas.getContext('2d');
             let particles = [];
+            let scanAngle = 0;
 
             const resize = () => {
                 canvas.width = window.innerWidth;
@@ -723,7 +740,8 @@
                     this.speedX = (Math.random() - 0.5) * 0.3;
                     this.speedY = (Math.random() - 0.5) * 0.3;
                     this.opacity = Math.random() * 0.5 + 0.2;
-                    this.color = ['#818cf8', '#a78bfa', '#f472b6', '#22d3ee'][Math.floor(Math.random() * 4)];
+                    // Tactical colors: cyan, green, amber
+                    this.color = ['#22d3ee', '#22c55e', '#06b6d4', '#86efac'][Math.floor(Math.random() * 4)];
                 }
                 update() {
                     this.x += this.speedX;
@@ -746,9 +764,100 @@
 
             const animate = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw radar sweep effect (only in hero area)
+                if (window.scrollY < window.innerHeight) {
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    const maxRadius = Math.max(canvas.width, canvas.height) * 0.6;
+
+                    // Draw radar rings
+                    for (let i = 1; i <= 4; i++) {
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, maxRadius * (i / 4), 0, Math.PI * 2);
+                        ctx.strokeStyle = 'rgba(34, 211, 238, 0.08)';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+
+                    // Draw crosshairs
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - maxRadius, centerY);
+                    ctx.lineTo(centerX + maxRadius, centerY);
+                    ctx.moveTo(centerX, centerY - maxRadius);
+                    ctx.lineTo(centerX, centerY + maxRadius);
+                    ctx.strokeStyle = 'rgba(34, 211, 238, 0.06)';
+                    ctx.stroke();
+
+                    // Draw radar sweep
+                    const gradient = ctx.createConicGradient(scanAngle, centerX, centerY);
+                    gradient.addColorStop(0, 'rgba(34, 211, 238, 0.12)');
+                    gradient.addColorStop(0.1, 'rgba(34, 211, 238, 0)');
+                    gradient.addColorStop(1, 'rgba(34, 211, 238, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, maxRadius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Draw threat targets (red blips)
+                    const threats = [
+                        { x: centerX + 150, y: centerY - 100, size: 6 },
+                        { x: centerX - 200, y: centerY + 80, size: 5 },
+                        { x: centerX + 80, y: centerY + 180, size: 4 },
+                        { x: centerX - 120, y: centerY - 150, size: 5 }
+                    ];
+
+                    threats.forEach((threat, i) => {
+                        const pulse = 0.5 + 0.5 * Math.sin(Date.now() * 0.003 + i);
+
+                        // Threat glow
+                        ctx.beginPath();
+                        ctx.arc(threat.x, threat.y, threat.size * 3 * pulse, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(239, 68, 68, ${0.2 * pulse})`;
+                        ctx.fill();
+
+                        // Threat core
+                        ctx.beginPath();
+                        ctx.arc(threat.x, threat.y, threat.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(239, 68, 68, ${0.6 + 0.4 * pulse})`;
+                        ctx.fill();
+
+                        // Targeting brackets
+                        const bs = threat.size * 2.5;
+                        ctx.strokeStyle = `rgba(239, 68, 68, ${0.4 + 0.3 * pulse})`;
+                        ctx.lineWidth = 1;
+                        // Top-left
+                        ctx.beginPath();
+                        ctx.moveTo(threat.x - bs, threat.y - bs + 4);
+                        ctx.lineTo(threat.x - bs, threat.y - bs);
+                        ctx.lineTo(threat.x - bs + 4, threat.y - bs);
+                        ctx.stroke();
+                        // Top-right
+                        ctx.beginPath();
+                        ctx.moveTo(threat.x + bs - 4, threat.y - bs);
+                        ctx.lineTo(threat.x + bs, threat.y - bs);
+                        ctx.lineTo(threat.x + bs, threat.y - bs + 4);
+                        ctx.stroke();
+                        // Bottom-left
+                        ctx.beginPath();
+                        ctx.moveTo(threat.x - bs, threat.y + bs - 4);
+                        ctx.lineTo(threat.x - bs, threat.y + bs);
+                        ctx.lineTo(threat.x - bs + 4, threat.y + bs);
+                        ctx.stroke();
+                        // Bottom-right
+                        ctx.beginPath();
+                        ctx.moveTo(threat.x + bs - 4, threat.y + bs);
+                        ctx.lineTo(threat.x + bs, threat.y + bs);
+                        ctx.lineTo(threat.x + bs, threat.y + bs - 4);
+                        ctx.stroke();
+                    });
+
+                    scanAngle += 0.01;
+                }
+
                 particles.forEach(p => { p.update(); p.draw(); });
 
-                // Draw connections
+                // Draw tactical connections
                 particles.forEach((a, i) => {
                     particles.slice(i + 1).forEach(b => {
                         const dx = a.x - b.x, dy = a.y - b.y;
@@ -757,7 +866,7 @@
                             ctx.beginPath();
                             ctx.moveTo(a.x, a.y);
                             ctx.lineTo(b.x, b.y);
-                            ctx.strokeStyle = `rgba(129, 140, 248, ${0.15 * (1 - dist / 120)})`;
+                            ctx.strokeStyle = `rgba(34, 211, 238, ${0.15 * (1 - dist / 120)})`;
                             ctx.stroke();
                         }
                     });
@@ -769,18 +878,196 @@
         createParticleCanvas();
 
         // =====================================
-        // CURSOR GLOW EFFECT
+        // TARGETING RETICLE CURSOR
         // =====================================
-        const cursorGlow = document.createElement('div');
-        cursorGlow.style.cssText = 'position:fixed;width:400px;height:400px;border-radius:50%;pointer-events:none;z-index:9999;background:radial-gradient(circle,rgba(129,140,248,0.15) 0%,transparent 70%);transform:translate(-50%,-50%);transition:opacity 0.3s;opacity:0;';
-        document.body.appendChild(cursorGlow);
+        (() => {
+            // Hide default cursor
+            const style = document.createElement('style');
+            style.textContent = `
+                *, *::before, *::after { cursor: none !important; }
+                a, button, input, textarea, select, [role="button"], .btn, .nav-links a, .social-link, .project-link, .contact-card { cursor: none !important; }
+            `;
+            document.head.appendChild(style);
 
-        document.addEventListener('mousemove', e => {
-            cursorGlow.style.left = e.clientX + 'px';
-            cursorGlow.style.top = e.clientY + 'px';
-            cursorGlow.style.opacity = '1';
-        });
-        document.addEventListener('mouseleave', () => cursorGlow.style.opacity = '0');
+            // Create reticle element with corner divs
+            const reticle = document.createElement('div');
+            reticle.id = 'targeting-reticle';
+            reticle.innerHTML = `
+                <div class="corners-wrapper">
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner br"></div>
+                    <div class="corner bl"></div>
+                </div>
+                <div class="center-dot"></div>
+            `;
+            document.body.appendChild(reticle);
+
+            // Reticle styles with corner positioning
+            const reticleStyle = document.createElement('style');
+            reticleStyle.textContent = `
+                #targeting-reticle {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 40px;
+                    height: 40px;
+                    pointer-events: none;
+                    z-index: 99999;
+                    will-change: transform, width, height;
+                }
+                #targeting-reticle .corner {
+                    position: absolute;
+                    width: 12px;
+                    height: 12px;
+                    border-color: rgba(34, 211, 238, 0.8);
+                    border-style: solid;
+                    border-width: 0;
+                    transition: border-color 0.2s ease;
+                }
+                #targeting-reticle .corner.tl {
+                    top: 0; left: 0;
+                    border-top-width: 2px;
+                    border-left-width: 2px;
+                }
+                #targeting-reticle .corner.tr {
+                    top: 0; right: 0;
+                    border-top-width: 2px;
+                    border-right-width: 2px;
+                }
+                #targeting-reticle .corner.br {
+                    bottom: 0; right: 0;
+                    border-bottom-width: 2px;
+                    border-right-width: 2px;
+                }
+                #targeting-reticle .corner.bl {
+                    bottom: 0; left: 0;
+                    border-bottom-width: 2px;
+                    border-left-width: 2px;
+                }
+                #targeting-reticle .center-dot {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 4px;
+                    height: 4px;
+                    background: rgba(34, 211, 238, 0.6);
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    transition: opacity 0.2s ease;
+                }
+                #targeting-reticle.locked .corner {
+                    border-color: rgba(34, 197, 94, 0.9);
+                }
+                #targeting-reticle.locked .center-dot {
+                    opacity: 0;
+                }
+                @keyframes reticleRotate {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+                #targeting-reticle .corners-wrapper {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    animation: reticleRotate 8s linear infinite;
+                }
+                #targeting-reticle.locked .corners-wrapper {
+                    animation: none;
+                }
+            `;
+            document.head.appendChild(reticleStyle);
+
+            // Fast movement - lower latency
+            let mouseX = 0, mouseY = 0;
+            let reticleX = 0, reticleY = 0;
+            let targetWidth = 40, targetHeight = 40;
+            let currentWidth = 40, currentHeight = 40;
+            let targetX = 0, targetY = 0;
+            let isLocked = false;
+            let lockedElement = null;
+            const ease = 0.25; // Faster response
+            const sizeEase = 0.18; // Faster size change
+
+            document.addEventListener('mousemove', e => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Interactive elements - cards for full border expansion
+            const cardSelectors = '.project-card, .skill-category, .leadership-card, .about-card, .achievement-content, .contact-card';
+            const interactiveSelectors = 'a, button, input, textarea, select, [role="button"], .btn, .audio-toggle';
+
+            document.addEventListener('mouseover', e => {
+                // Check for cards first (full border expansion)
+                const card = e.target.closest(cardSelectors);
+                if (card) {
+                    reticle.classList.add('locked');
+                    isLocked = true;
+                    lockedElement = card;
+                    return;
+                }
+                // Check for interactive elements
+                const target = e.target.closest(interactiveSelectors);
+                if (target) {
+                    reticle.classList.add('locked');
+                    isLocked = true;
+                    lockedElement = target;
+                }
+            });
+
+            document.addEventListener('mouseout', e => {
+                const card = e.target.closest(cardSelectors);
+                const target = e.target.closest(interactiveSelectors);
+                if ((card && !card.contains(e.relatedTarget)) || (target && !target.contains(e.relatedTarget))) {
+                    reticle.classList.remove('locked');
+                    isLocked = false;
+                    lockedElement = null;
+                    targetWidth = 40;
+                    targetHeight = 40;
+                }
+            });
+
+            // Animation loop
+            const animate = () => {
+                // If locked, center on element and expand to its size
+                if (isLocked && lockedElement) {
+                    const rect = lockedElement.getBoundingClientRect();
+                    targetWidth = rect.width + 16;
+                    targetHeight = rect.height + 16;
+                    // Center on element
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    reticleX += (centerX - reticleX) * ease;
+                    reticleY += (centerY - reticleY) * ease;
+                } else {
+                    // Follow mouse when not locked
+                    reticleX += (mouseX - reticleX) * ease;
+                    reticleY += (mouseY - reticleY) * ease;
+                }
+
+                // Size interpolation
+                currentWidth += (targetWidth - currentWidth) * sizeEase;
+                currentHeight += (targetHeight - currentHeight) * sizeEase;
+
+                reticle.style.transform = `translate(${reticleX - currentWidth / 2}px, ${reticleY - currentHeight / 2}px)`;
+                reticle.style.width = `${currentWidth}px`;
+                reticle.style.height = `${currentHeight}px`;
+
+                requestAnimationFrame(animate);
+            };
+            animate();
+
+            // Hide on mouse leave
+            document.addEventListener('mouseleave', () => {
+                reticle.style.opacity = '0';
+            });
+            document.addEventListener('mouseenter', () => {
+                reticle.style.opacity = '1';
+            });
+        })();
 
         // =====================================
         // 3D CARD TILT EFFECT
@@ -874,34 +1161,89 @@
         });
 
         // =====================================
-        // STAGGERED ANIMATION FOR CARDS
+        // ENHANCED CARD ENTRANCE ANIMATIONS
         // =====================================
-        const animateCards = (selector) => {
+        const cardAnimationStyle = document.createElement('style');
+        cardAnimationStyle.textContent = `
+            .card-animate {
+                opacity: 0;
+                transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            }
+            .card-from-left {
+                transform: translateX(-80px) translateY(40px) scale(0.9);
+            }
+            .card-from-right {
+                transform: translateX(80px) translateY(40px) scale(0.9);
+            }
+            .card-from-bottom {
+                transform: translateY(60px) scale(0.95);
+            }
+            .card-from-scale {
+                transform: scale(0.8);
+            }
+            .card-animate.card-visible {
+                opacity: 1;
+                transform: translateX(0) translateY(0) scale(1);
+            }
+            
+            /* Special floating animation after entrance */
+            @keyframes subtleFloat {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-5px); }
+            }
+            .card-animate.card-visible:hover {
+                animation: subtleFloat 3s ease-in-out infinite;
+            }
+        `;
+        document.head.appendChild(cardAnimationStyle);
+
+        // Animate cards with staggered delays and alternating directions
+        const animateCardsEnhanced = (selector, direction = 'alternate') => {
             const cards = document.querySelectorAll(selector);
+
+            cards.forEach((card, index) => {
+                card.classList.add('card-animate');
+
+                if (direction === 'alternate') {
+                    card.classList.add(index % 2 === 0 ? 'card-from-left' : 'card-from-right');
+                } else if (direction === 'left') {
+                    card.classList.add('card-from-left');
+                } else if (direction === 'right') {
+                    card.classList.add('card-from-right');
+                } else if (direction === 'bottom') {
+                    card.classList.add('card-from-bottom');
+                } else if (direction === 'scale') {
+                    card.classList.add('card-from-scale');
+                }
+            });
+
             const cardObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
+                entries.forEach((entry) => {
                     if (entry.isIntersecting) {
+                        // Get index for staggered delay
+                        const cards = Array.from(document.querySelectorAll(selector));
+                        const index = cards.indexOf(entry.target);
+
                         setTimeout(() => {
-                            entry.target.style.opacity = '1';
-                            entry.target.style.transform = 'translateY(0)';
-                        }, index * 100);
+                            entry.target.classList.add('card-visible');
+                        }, index * 150);
+
                         cardObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
 
-            cards.forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
-                cardObserver.observe(card);
-            });
+            cards.forEach(card => cardObserver.observe(card));
         };
 
-        animateCards('.project-card');
-        animateCards('.skill-category');
-        animateCards('.leadership-card');
-        animateCards('.achievement-item');
+        // Apply different animation styles to different sections
+        animateCardsEnhanced('.project-card', 'alternate');      // Projects: left-right alternating
+        animateCardsEnhanced('.skill-category', 'bottom');        // Skills: rise from bottom
+        animateCardsEnhanced('.leadership-card', 'scale');        // Leadership: scale up
+        animateCardsEnhanced('.achievement-item', 'left');        // Achievements: slide from left
+        animateCardsEnhanced('.contact-card', 'bottom');          // Contact: rise from bottom
+        animateCardsEnhanced('.highlight-item', 'scale');         // Highlights: scale up
+        animateCardsEnhanced('.about-card', 'right');             // About sidebar: slide from right
 
         // =====================================
         // TYPEWRITER EFFECT FOR HEADINGS
@@ -1007,6 +1349,85 @@
             };
             setTimeout(typePrefix, 500);
         }
+
+        // =====================================
+        // AMBIENT SOUND SYSTEM
+        // =====================================
+        const audioToggle = document.getElementById('audio-toggle');
+        const audioOnIcon = audioToggle.querySelector('.audio-on');
+        const audioOffIcon = audioToggle.querySelector('.audio-off');
+        let audioContext = null;
+        let isPlaying = false;
+        let oscillators = [];
+        let gainNode = null;
+
+        const createAmbientSound = () => {
+            if (audioContext) return;
+
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            gainNode = audioContext.createGain();
+            gainNode.gain.value = 0.03; // Very low volume
+            gainNode.connect(audioContext.destination);
+
+            // Create subtle ambient drone
+            const frequencies = [65, 98, 130, 196]; // Low ambient frequencies
+            frequencies.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const oscGain = audioContext.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                oscGain.gain.value = 0.15 / (i + 1);
+                osc.connect(oscGain);
+                oscGain.connect(gainNode);
+                osc.start();
+                oscillators.push({ osc, gain: oscGain });
+            });
+
+            // Add subtle radar ping every few seconds
+            const createPing = () => {
+                if (!isPlaying) return;
+                const ping = audioContext.createOscillator();
+                const pingGain = audioContext.createGain();
+                ping.type = 'sine';
+                ping.frequency.value = 1200;
+                pingGain.gain.value = 0;
+                ping.connect(pingGain);
+                pingGain.connect(gainNode);
+
+                const now = audioContext.currentTime;
+                pingGain.gain.setValueAtTime(0, now);
+                pingGain.gain.linearRampToValueAtTime(0.1, now + 0.05);
+                pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+                ping.start(now);
+                ping.stop(now + 0.5);
+
+                setTimeout(createPing, 4000 + Math.random() * 3000);
+            };
+            setTimeout(createPing, 2000);
+        };
+
+        const toggleAudio = () => {
+            if (!isPlaying) {
+                createAmbientSound();
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                gainNode.gain.setTargetAtTime(0.03, audioContext.currentTime, 0.5);
+                isPlaying = true;
+                audioToggle.classList.add('playing');
+                audioOnIcon.style.display = 'none';
+                audioOffIcon.style.display = 'block';
+            } else {
+                gainNode.gain.setTargetAtTime(0, audioContext.currentTime, 0.3);
+                isPlaying = false;
+                audioToggle.classList.remove('playing');
+                audioOnIcon.style.display = 'block';
+                audioOffIcon.style.display = 'none';
+            }
+        };
+
+        audioToggle.addEventListener('click', toggleAudio);
     </script>
 </body>
 
