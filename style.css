@@ -982,6 +982,9 @@ body {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
 }
 
 .project-link:hover {
