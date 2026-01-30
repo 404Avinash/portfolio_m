@@ -760,6 +760,62 @@
         </div>
     </footer>
 
+    <!-- Under Construction Badge -->
+    <div class="under-construction">
+        <span class="construction-icon">🚧</span>
+        <span class="construction-text">Under Construction — Still Building Portfolio</span>
+    </div>
+
+    <style>
+        .under-construction {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(10, 13, 18, 0.9);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #f59e0b;
+            font-family: var(--font-mono);
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+            animation: constructionPulse 2s ease-in-out infinite;
+        }
+
+        .construction-icon {
+            font-size: 1rem;
+        }
+
+        .construction-text {
+            letter-spacing: 0.02em;
+        }
+
+        @keyframes constructionPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .under-construction {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                font-size: 0.7rem;
+                padding: 8px 12px;
+            }
+        }
+    </style>
     <script>
         // =====================================
         // TACTICAL PARTICLE RADAR SYSTEM
