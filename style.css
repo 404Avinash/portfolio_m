@@ -808,6 +808,7 @@ body {
     opacity: 0;
     transition: opacity 0.4s ease;
     animation: borderGlow 4s ease infinite;
+    pointer-events: none;
 }
 
 @keyframes borderGlow {
