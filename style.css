@@ -968,6 +968,8 @@ body {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 20;
 }
 
 .project-link {
