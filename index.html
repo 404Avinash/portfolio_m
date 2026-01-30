@@ -1050,23 +1050,23 @@
 
             // Interactive elements - cards for full border expansion
             const cardSelectors = '.project-card, .skill-category, .leadership-card, .about-card, .achievement-content, .contact-card';
-            const interactiveSelectors = 'a, button, input, textarea, select, [role="button"], .btn, .audio-toggle';
+            const interactiveSelectors = 'a, button, input, textarea, select, [role="button"], .btn, .audio-toggle, .project-link';
 
             document.addEventListener('mouseover', e => {
-                // Check for cards first (full border expansion)
-                const card = e.target.closest(cardSelectors);
-                if (card) {
-                    reticle.classList.add('locked');
-                    isLocked = true;
-                    lockedElement = card;
-                    return;
-                }
-                // Check for interactive elements
+                // Check for interactive elements FIRST (links, buttons should take priority)
                 const target = e.target.closest(interactiveSelectors);
                 if (target) {
                     reticle.classList.add('locked');
                     isLocked = true;
                     lockedElement = target;
+                    return;
+                }
+                // Check for cards second (full border expansion)
+                const card = e.target.closest(cardSelectors);
+                if (card) {
+                    reticle.classList.add('locked');
+                    isLocked = true;
+                    lockedElement = card;
                 }
             });
 
