@@ -24,7 +24,8 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="certificates.html">Certificates</a></li>
+                <li><a href="research.html">Research</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="nav-actions">
@@ -97,6 +98,14 @@
                     JATAYU GitHub
                 </a>
                 <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                <a href="certificates.html" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <path d="M9 15l2 2 4-4" />
+                    </svg>
+                    My Certs
+                </a>
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -581,7 +590,7 @@
     <section class="section achievements" id="achievements">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">04 / Achievements</span>
+                <span class="section-tag">04 / Journey</span>
                 <h2 class="section-title">Recognition & Awards</h2>
             </div>
             <div class="achievements-timeline">
@@ -596,6 +605,14 @@
                             <li>Optimized aerodynamics for maximum lift efficiency</li>
                             <li>Demonstrated to CSIR officials; achieved national win</li>
                         </ul>
+                        <div class="achievement-gallery">
+                            <img src="journey/2022 aero fest 2.0/22.jpg" alt="Aerofest 2022"
+                                onclick="openJourneyLightbox(this.src, 'CSIR-NAL Aerofest 2.0 - 2022')">
+                            <img src="journey/2022 aero fest 2.0/2222.jpg" alt="Aerofest 2022"
+                                onclick="openJourneyLightbox(this.src, 'CSIR-NAL Aerofest 2.0 - 2022')">
+                            <img src="journey/2022 aero fest 2.0/eng 22.jpg" alt="Aerofest 2022"
+                                onclick="openJourneyLightbox(this.src, 'Electric Aircraft Project - 2022')">
+                        </div>
                     </div>
                 </div>
                 <div class="achievement-item">
@@ -609,6 +626,16 @@
                             <li>Designed high-aspect-ratio wings for stable long-duration flight</li>
                             <li>Presented to NAL jury and secured national top position</li>
                         </ul>
+                        <div class="achievement-gallery">
+                            <img src="journey/2023 aerofest 3.0/2023.jpg" alt="Aerofest 2023"
+                                onclick="openJourneyLightbox(this.src, 'CSIR-NAL Aerofest 3.0 - 2023')">
+                            <img src="journey/2023 aerofest 3.0/2223.jpg" alt="Aerofest 2023"
+                                onclick="openJourneyLightbox(this.src, 'HAPS UAV Project - 2023')">
+                            <img src="journey/2023 aerofest 3.0/23.jpg" alt="Aerofest 2023"
+                                onclick="openJourneyLightbox(this.src, 'National Winner - 2023')">
+                            <img src="journey/2023 aerofest 3.0/222233.jpg" alt="Aerofest 2023"
+                                onclick="openJourneyLightbox(this.src, 'Team Presentation - 2023')">
+                        </div>
                     </div>
                 </div>
                 <div class="achievement-item">
@@ -627,6 +654,143 @@
             </div>
         </div>
     </section>
+
+    <!-- Journey Lightbox -->
+    <div class="journey-lightbox" id="journeyLightbox" onclick="closeJourneyLightbox()">
+        <div class="journey-lightbox-content" onclick="event.stopPropagation()">
+            <button class="journey-lightbox-close" onclick="closeJourneyLightbox()">×</button>
+            <img id="journeyLightboxImage" src="" alt="">
+            <div class="journey-lightbox-title" id="journeyLightboxTitle"></div>
+        </div>
+    </div>
+
+    <style>
+        /* Achievement Gallery Styles */
+        .achievement-gallery {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .achievement-gallery img {
+            width: 100px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid rgba(34, 211, 238, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-gallery img:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-primary);
+            box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* Journey Lightbox */
+        .journey-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 13, 18, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .journey-lightbox.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .journey-lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            text-align: center;
+        }
+
+        .journey-lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .journey-lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            border-radius: 50%;
+            color: #ef4444;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .journey-lightbox-close:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .journey-lightbox-title {
+            margin-top: 16px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        @media (max-width: 768px) {
+            .achievement-gallery img {
+                width: 80px;
+                height: 60px;
+            }
+        }
+    </style>
+
+    <script>
+        // Journey Lightbox Functions
+        function openJourneyLightbox(src, title) {
+            document.getElementById('journeyLightboxImage').src = src;
+            document.getElementById('journeyLightboxTitle').textContent = title;
+            document.getElementById('journeyLightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeJourneyLightbox() {
+            document.getElementById('journeyLightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeJourneyLightbox();
+        });
+    </script>
 
     <!-- Leadership Section -->
     <section class="section leadership" id="leadership">
@@ -986,196 +1150,9 @@
         createParticleCanvas();
 
         // =====================================
-        // TARGETING RETICLE CURSOR
+        // CUSTOM CURSOR DISABLED FOR BETTER UX
         // =====================================
-        (() => {
-            // Hide default cursor
-            const style = document.createElement('style');
-            style.textContent = `
-                *, *::before, *::after { cursor: none !important; }
-                a, button, input, textarea, select, [role="button"], .btn, .nav-links a, .social-link, .project-link, .contact-card { cursor: none !important; }
-            `;
-            document.head.appendChild(style);
-
-            // Create reticle element with corner divs
-            const reticle = document.createElement('div');
-            reticle.id = 'targeting-reticle';
-            reticle.innerHTML = `
-                <div class="corners-wrapper">
-                    <div class="corner tl"></div>
-                    <div class="corner tr"></div>
-                    <div class="corner br"></div>
-                    <div class="corner bl"></div>
-                </div>
-                <div class="center-dot"></div>
-            `;
-            document.body.appendChild(reticle);
-
-            // Reticle styles with corner positioning
-            const reticleStyle = document.createElement('style');
-            reticleStyle.textContent = `
-                #targeting-reticle {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 40px;
-                    height: 40px;
-                    pointer-events: none;
-                    z-index: 99999;
-                    will-change: transform, width, height;
-                }
-                #targeting-reticle .corner {
-                    position: absolute;
-                    width: 12px;
-                    height: 12px;
-                    border-color: rgba(34, 211, 238, 0.8);
-                    border-style: solid;
-                    border-width: 0;
-                    transition: border-color 0.2s ease;
-                }
-                #targeting-reticle .corner.tl {
-                    top: 0; left: 0;
-                    border-top-width: 2px;
-                    border-left-width: 2px;
-                }
-                #targeting-reticle .corner.tr {
-                    top: 0; right: 0;
-                    border-top-width: 2px;
-                    border-right-width: 2px;
-                }
-                #targeting-reticle .corner.br {
-                    bottom: 0; right: 0;
-                    border-bottom-width: 2px;
-                    border-right-width: 2px;
-                }
-                #targeting-reticle .corner.bl {
-                    bottom: 0; left: 0;
-                    border-bottom-width: 2px;
-                    border-left-width: 2px;
-                }
-                #targeting-reticle .center-dot {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: 4px;
-                    height: 4px;
-                    background: rgba(34, 211, 238, 0.6);
-                    border-radius: 50%;
-                    transform: translate(-50%, -50%);
-                    transition: opacity 0.2s ease;
-                }
-                #targeting-reticle.locked .corner {
-                    border-color: rgba(34, 197, 94, 0.9);
-                }
-                #targeting-reticle.locked .center-dot {
-                    opacity: 0;
-                }
-                @keyframes reticleRotate {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                #targeting-reticle .corners-wrapper {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    animation: reticleRotate 8s linear infinite;
-                }
-                #targeting-reticle.locked .corners-wrapper {
-                    animation: none;
-                }
-            `;
-            document.head.appendChild(reticleStyle);
-
-            // Fast movement - lower latency
-            let mouseX = 0, mouseY = 0;
-            let reticleX = 0, reticleY = 0;
-            let targetWidth = 40, targetHeight = 40;
-            let currentWidth = 40, currentHeight = 40;
-            let targetX = 0, targetY = 0;
-            let isLocked = false;
-            let lockedElement = null;
-            const ease = 0.25; // Faster response
-            const sizeEase = 0.18; // Faster size change
-
-            document.addEventListener('mousemove', e => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-
-            // Interactive elements - cards for full border expansion
-            const cardSelectors = '.project-card, .skill-category, .leadership-card, .about-card, .achievement-content, .contact-card';
-            const interactiveSelectors = 'a, button, input, textarea, select, [role="button"], .btn, .audio-toggle, .project-link';
-
-            document.addEventListener('mouseover', e => {
-                // Check for interactive elements FIRST (links, buttons should take priority)
-                const target = e.target.closest(interactiveSelectors);
-                if (target) {
-                    reticle.classList.add('locked');
-                    isLocked = true;
-                    lockedElement = target;
-                    return;
-                }
-                // Check for cards second (full border expansion)
-                const card = e.target.closest(cardSelectors);
-                if (card) {
-                    reticle.classList.add('locked');
-                    isLocked = true;
-                    lockedElement = card;
-                }
-            });
-
-            document.addEventListener('mouseout', e => {
-                const card = e.target.closest(cardSelectors);
-                const target = e.target.closest(interactiveSelectors);
-                if ((card && !card.contains(e.relatedTarget)) || (target && !target.contains(e.relatedTarget))) {
-                    reticle.classList.remove('locked');
-                    isLocked = false;
-                    lockedElement = null;
-                    targetWidth = 40;
-                    targetHeight = 40;
-                }
-            });
-
-            // Animation loop
-            const animate = () => {
-                // If locked, center on element and expand to its size
-                if (isLocked && lockedElement) {
-                    const rect = lockedElement.getBoundingClientRect();
-                    targetWidth = rect.width + 16;
-                    targetHeight = rect.height + 16;
-                    // Center on element
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                    reticleX += (centerX - reticleX) * ease;
-                    reticleY += (centerY - reticleY) * ease;
-                } else {
-                    // Follow mouse when not locked
-                    reticleX += (mouseX - reticleX) * ease;
-                    reticleY += (mouseY - reticleY) * ease;
-                }
-
-                // Size interpolation
-                currentWidth += (targetWidth - currentWidth) * sizeEase;
-                currentHeight += (targetHeight - currentHeight) * sizeEase;
-
-                reticle.style.transform = `translate(${reticleX - currentWidth / 2}px, ${reticleY - currentHeight / 2}px)`;
-                reticle.style.width = `${currentWidth}px`;
-                reticle.style.height = `${currentHeight}px`;
-
-                requestAnimationFrame(animate);
-            };
-            animate();
-
-            // Hide on mouse leave
-            document.addEventListener('mouseleave', () => {
-                reticle.style.opacity = '0';
-            });
-            document.addEventListener('mouseenter', () => {
-                reticle.style.opacity = '1';
-            });
-        })();
+        // Normal cursor enabled for easier clicking
 
         // =====================================
         // 3D CARD TILT EFFECT
